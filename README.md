@@ -64,3 +64,7 @@ El presente código despliega un servidor node.js/express sobre el que se busca 
 > - action: Endpoint al que se accede
 > - header: Headers de la llamada almacenados como una cadena de texto plana
 > - ip: Dirección IP desde donde se realiza la llamada
+
+#### POSTMAN DOCUMENTATION
+
+> https://documenter.getpostman.com/view/12046942/2s8Z6x3Dve
