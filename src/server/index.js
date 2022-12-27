@@ -6,9 +6,10 @@ const createExpressServer = async app => {
 	const server = express();
 	applyMiddlewares(server, app);
 	applyEndpoints(server, app);
-    
+	await app.db.deleteDB();
     await app.db.initDB();
-
+	await app.db.populateDB();
+	await app.db.watchDB();
 	server.get('/', async (req, res) => {
 		if(process.env.NODE_ENV === 'develop'){
 				res.send('Test Enviroment');
