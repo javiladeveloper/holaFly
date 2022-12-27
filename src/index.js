@@ -8,7 +8,8 @@ const app = require('./app');
 
 async function start() {
 	const server = await createServer(app);
-
+	server.use(bodyParser.json());
+	server.use(bodyParser.urlencoded({ extended: true }));
   server.get('/', (req, res) => {
     res.send('Welcome to Holafly\'s Technical test!');
   });

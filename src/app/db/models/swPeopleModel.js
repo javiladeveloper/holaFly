@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
             homeworld_id: DataTypes.STRING,
         }, 
         {
-            paranoid: true
+            paranoid: true,
+            timestamps: false,
         }
     );
     return swPeople;
