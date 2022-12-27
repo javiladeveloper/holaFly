@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
             gravity: DataTypes.FLOAT,
         }, 
         {
-            paranoid: true
+            paranoid: true,
+            timestamps: false,
         }
     );
     return swPlanet;
