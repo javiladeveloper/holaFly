@@ -79,7 +79,83 @@ const applySwapiEndpoints = (server, app) => {
   });
 
   server.get("/hfswapi/getWeightOnPlanetRandom", async (req, res) => {
-    res.sendStatus(501);
+    const peoples = await app.swapiFunctions.genericRequest(
+      `${url}people`,
+      "GET",
+      null,
+      false
+    );
+    const planets = await app.swapiFunctions.genericRequest(
+      `${url}planets`,
+      "GET",
+      null,
+      false
+    );
+    const randomPeople = Math.ceil(Math.random() * peoples.count);
+    const randomPlanet = Math.ceil(Math.random() * planets.count);
+    try {
+      let People = await swPeople.findOne({
+        where: {
+          id: randomPeople,
+        },
+      });
+      if (!People) {
+        const getPeople = await app.swapiFunctions.genericRequest(
+          `${url}people/${randomPeople}`,
+          "GET",
+          null,
+          true
+        );
+        const getPlanet = await app.swapiFunctions.genericRequest(
+          getPeople.homeworld,
+          "GET",
+          null,
+          true
+        );
+        People = {
+          name: getPeople.name,
+          mass: getPeople.mass,
+          height: getPeople.height,
+          homeworld_name: getPlanet.name,
+          homeworld_id: getPeople.homeworld.replace(url, "/"),
+        };
+      }
+      let Planet = await swPlanet.findOne({
+        where: {
+          id: randomPlanet,
+        },
+      });
+      if (!Planet) {
+        const getPlanet = await app.swapiFunctions.genericRequest(
+          `${url}planets/${randomPeople}`,
+          "GET",
+          null,
+          true
+        );
+        Planet = {
+          name: getPlanet.name,
+          gravity: getPlanet.gravity,
+        };
+      }
+
+      const peso = parseInt(Planet.gravity) * parseInt(People.mass);
+      console.log(parseInt(Planet.gravity));
+      console.log(parseInt(People.mass));
+      console.log(peso);
+
+      const PlanetId = parseInt(People.homeworld_id.replace(/[^0-9]+/g, ""));
+      if(PlanetId !== randomPlanet){
+        res.status(httpStatusCodes.OK).send({
+          character: People.name,
+        });
+      } 
+      res.sendStatus(httpStatusCodes.NOT_ACCEPTABLE)
+
+
+    } catch (err) {
+      console.log(err);
+      res.status(err.code).send({ error: err.message });
+    }
   });
 
   server.get("/hfswapi/getLogs", async (req, res) => {
