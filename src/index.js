@@ -14,7 +14,6 @@ async function start() {
     res.send('Welcome to Holafly\'s Technical test!');
   });
 
-	// Start the GraphQL server
   const port = process.env.PORT || 4567;
 	server.listen(port , () => {
 		// eslint-disable-next-line no-console

@@ -139,28 +139,25 @@ const applySwapiEndpoints = (server, app) => {
       }
 
       const peso = parseInt(Planet.gravity) * parseInt(People.mass);
-      console.log(parseInt(Planet.gravity));
-      console.log(parseInt(People.mass));
-      console.log(peso);
 
       const PlanetId = parseInt(People.homeworld_id.replace(/[^0-9]+/g, ""));
       if(PlanetId !== randomPlanet){
         res.status(httpStatusCodes.OK).send({
           character: People.name,
+          weight: peso
         });
       } 
       res.sendStatus(httpStatusCodes.NOT_ACCEPTABLE)
 
 
     } catch (err) {
-      console.log(err);
       res.status(err.code).send({ error: err.message });
     }
   });
 
   server.get("/hfswapi/getLogs", async (req, res) => {
     const data = await app.db.logging.findAll();
-    res.send(data);
+    res.send(data).end();
   });
 };
 
